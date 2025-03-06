@@ -24,6 +24,7 @@ abstract class Game extends Canvas {
     frame.setVisible(true);
     frame.setResizable(false);
     frame.addWindowListener(new WindowAdapter() { 
+      @Override
       public void windowClosing(WindowEvent e) {System.exit(0);} 
     });
     
@@ -31,6 +32,7 @@ abstract class Game extends Canvas {
 	}
   
   // 'paint' will be called every tenth of a second that the game is on.
+  @Override
 	abstract public void paint(Graphics brush);
   
   // 'update' paints to a buffer then to the screen, then waits a tenth of
