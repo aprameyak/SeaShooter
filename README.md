@@ -1,1 +1,1 @@
-A spinoff of space invaders made for CMSC132 at the University of Maryland with Professor Elias Gonzalez by Aprameya Kannan and Lauren Chipdey.
+A spinoff of space invaders made for CMSC132 at the University of Maryland with Professor Elias Gonzalez by Aprameya Kannan and Lauren Chipdey. SeaShooter is a game in which a user plays as a submarine battling squids and sharks in the deep sea.
