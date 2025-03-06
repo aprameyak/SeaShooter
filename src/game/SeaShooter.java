@@ -11,11 +11,14 @@ import java.awt.*;
 
 class SeaShooter extends Game {
 	static int counter = 0;
-
+	private Submarine submarine;
+	
   public SeaShooter() {
     super("SeaShooter!",800,600);
     this.setFocusable(true);
 	this.requestFocus();
+	Point[]	submarinePoints = {new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0)};
+	submarine = new Submarine(submarinePoints, new Point(300.0, 300.0), 0.0);
   }
   
 	@Override
@@ -29,10 +32,11 @@ class SeaShooter extends Game {
     	counter++;
     	brush.setColor(Color.white);
     	brush.drawString("Counter is " + counter,10,10);
+		submarine.paint(brush);
   }
   
 	public static void main (String[] args) {
-   		SeaShooter a = new SeaShooter();
+   		SeaShooter a = new SeaShooter();	
 		a.repaint();
   }
 }
