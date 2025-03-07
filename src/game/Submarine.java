@@ -39,10 +39,14 @@ public class Submarine extends Polygon{
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
 
-    public void move(boolean forward, boolean right, boolean left) {
+    public void move(boolean forward,boolean backward, boolean right, boolean left) {
         if(forward) {
             this.position.x += MOVE_AMOUNT * Math.cos(Math.toRadians(this.rotation));
             this.position.y += MOVE_AMOUNT * Math.sin(Math.toRadians(this.rotation));
+        }
+        if(backward) {
+            this.position.x -= MOVE_AMOUNT * Math.cos(Math.toRadians(this.rotation));
+            this.position.y -= MOVE_AMOUNT * Math.sin(Math.toRadians(this.rotation));
         }
         if(right) {
             this.rotation += ROTATE_AMOUNT;
