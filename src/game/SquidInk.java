@@ -5,12 +5,12 @@ import java.awt.Graphics;
 
 public class SquidInk extends Projectile {
     private int damage;  // Damage value for the squid ink
-    private int width = 10;  // Width of the squid ink (rectangle)
-    private int height = 5;  // Height of the squid ink (rectangle)
-
-    // Constructor for SquidInk, defining position, angle, and damage
+    private int width = 10; 
+    private int height = 5;  
+    private int speed = 2;
+   
     public SquidInk(Point position, double angle) {
-        super(position, angle, 2, 10); // Speed 5, Damage 20 (can adjust as needed)
+        super(position, angle, 2, 10); // Speed, Damage 
         this.damage = 10; // Set the damage value
     }
 
@@ -22,15 +22,15 @@ public class SquidInk extends Projectile {
     // Paint the squid ink on the screen (draw it as a rectangle)
     @Override
     public void paint(Graphics brush) {
-        brush.setColor(Color.MAGENTA); // Squid ink is purple/magenta
+        brush.setColor(Color.BLUE); // Squid ink is purple/magenta
 
-        // Draw the squid ink as a rectangle based on its current position and size
+        // Draw the squid ink
         brush.fillRect((int) position.x, (int) position.y, width, height);
     }
 
-    // Move the squid ink projectile (moving left)
+    // Move the squid ink projectile
     public void move() {
-        this.position.x -= 5; // Move left by 5 units each time
+        this.position.x -= speed; 
     }
 
     // Check if the squid ink hits the submarine
