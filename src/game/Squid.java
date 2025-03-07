@@ -7,14 +7,30 @@ public class Squid extends Polygon implements Enemy {
     private int squidHealth = 100;
     private int squidAttack = 10;
     private double speed = 0.2;
+    private SeaShooter seaShooter;
+    private long lastInkShotTime = 0;  // Time of the last ink shot
+    private int inkCooldown = 1000;  // Cooldown period 
 
-
-    @Override
+    
     public void attack() {
-        System.out.println("The squid attacks!");
+    	long currentTime = System.currentTimeMillis();  // Get the current time 
+        
+        // Check if enough time has passed since the last ink shot
+        if (currentTime - lastInkShotTime >= inkCooldown) {
+          
+            Point inkStartPosition = new Point(this.position.x, this.position.y); // Start position of the ink at the squid
+
+            // Create a new SquidInk and add it to the ink list
+            SquidInk squidInk = new SquidInk(inkStartPosition, 0);
+            seaShooter.addInk(squidInk);  // Add the ink to the SeaShooter's ink list
+            
+            // Update the last ink shot time to the current time
+            lastInkShotTime = currentTime;
+        }
     }
-    public Squid(Point[] squidPoints, Point squidPosition, double squidRotation) {
+    public Squid(Point[] squidPoints, Point squidPosition, double squidRotation,SeaShooter seaShooter ) {
         super(squidPoints, squidPosition , squidRotation);
+        this.seaShooter = seaShooter;
     }
 
     private final Damageable takeDamage = (damage) -> squidHealth -= damage;
@@ -47,6 +63,10 @@ public class Squid extends Polygon implements Enemy {
     }
     public void moveLeft() {
         this.position.x -= speed; //moves left
+        
+    }
+    public void fireInk() {
+        attack();  // Fire ink without affecting squid movement
     }
     public boolean checkHit(Projectile projectile) {
         Point squidPosition = this.position;

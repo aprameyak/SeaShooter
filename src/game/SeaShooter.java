@@ -14,6 +14,7 @@ class SeaShooter extends Game implements KeyListener {
 	public boolean up, down, right, left;
 	private int wave = 1;
 	private ArrayList<Projectile> projectiles;
+	private ArrayList<SquidInk> inks;
 
 	public SeaShooter() {
 		super("SeaShooter!", 800, 600);
@@ -27,6 +28,7 @@ class SeaShooter extends Game implements KeyListener {
 		// initialize sharks and squids
 		sharks = new ArrayList<>();
 		squids = new ArrayList<>();
+		inks = new ArrayList<>();
 		spawnEnemies(); //populate
 	
 		this.addKeyListener(this);
@@ -49,7 +51,8 @@ class SeaShooter extends Game implements KeyListener {
 			Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
 					new Point(0.0, 0.0) };
 			Point squidPosition = new Point(800.0, rand.nextInt(height-30)); // Right edge, random Y-coordinate
-			squids.add(new Squid(squidPoints, squidPosition, 0.0));
+			 Squid squid = new Squid(squidPoints, squidPosition, 0.0, this);
+			 squids.add(squid);
 			if (wave == 2) { //second wave is faster
 				squids.get(i).changeSpeed(0.5);
 			}
@@ -132,6 +135,18 @@ class SeaShooter extends Game implements KeyListener {
 				break; 
 			}
 			squid.moveLeft(); // advance left
+			squid.fireInk(); //shoot
+		}
+		// Draw ink projectiles
+		for (SquidInk ink : inks) {
+		    ink.paint(brush); // Draw the ink
+		    ink.move(); // Move the ink
+		    // Check if the ink hits the submarine or other objects
+		    if (ink.checkHit(submarine)) {
+		        submarine.applyDamage(ink.getDamage()); // Apply damage if hit
+		        inks.remove(ink); // Remove ink after collision
+		        break; // Break to avoid concurrent modification
+		    }
 		}
 		
 		
@@ -158,6 +173,9 @@ class SeaShooter extends Game implements KeyListener {
 		Point missileStartPosition = new Point(submarine.getPosition().x + 30, submarine.getPosition().y); // adjust for front of sub																								
 		Projectile missile = new Missile(missileStartPosition, missileAngle); //create new missile, add to list
 		projectiles.add(missile);
+	}
+	public void addInk(SquidInk ink) {
+	    inks.add(ink);  
 	}
 
 	@Override
