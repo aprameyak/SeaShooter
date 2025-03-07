@@ -27,6 +27,9 @@ public class Shark extends Polygon implements Enemy {
     public int getAttackDamage() {
         return sharkAttack;
     }
+    public int getHealth() {
+        return sharkHealth;
+    }
     
     public void changeSpeed(double speed) {
     	this.speed = speed;
@@ -49,7 +52,7 @@ public class Shark extends Polygon implements Enemy {
         this.position.x -= speed; //moves left
     }
     public boolean checkCollision(Submarine submarine) {
-        // Check if the shark's location overlaps with the submarine's location
+        // Check if the shark's location overlaps with the submarine's location, a bite
         Point sharkPosition = this.position;
         Point submarinePosition = submarine.getPosition();
         
@@ -63,5 +66,18 @@ public class Shark extends Polygon implements Enemy {
             }
         }
         return false; // No collision or already damaged
+    }
+    
+    public boolean checkHit(Projectile projectile) {
+        Point sharkPosition = this.position;
+        Point projectilePosition = projectile.position;
+
+        if (projectilePosition.x < sharkPosition.x + 60 && 
+            projectilePosition.x + 10 > sharkPosition.x && 
+            projectilePosition.y < sharkPosition.y + 30 && 
+            projectilePosition.y + 5 > sharkPosition.y) {
+            return true; // Collision detected
+        }
+        return false; // No collision
     }
 }

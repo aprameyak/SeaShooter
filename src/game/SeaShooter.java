@@ -27,31 +27,30 @@ class SeaShooter extends Game implements KeyListener {
 		// initialize sharks and squids
 		sharks = new ArrayList<>();
 		squids = new ArrayList<>();
-
-		spawnEnemies();
+		spawnEnemies(); //populate
+	
 		this.addKeyListener(this);
 	}
 
 	private void spawnEnemies() {
 		Random rand = new Random();
-
-		// Spawn 3 sharks and squids for now
+		// Spawn 3 sharks and squids
 		for (int i = 0; i < 3; i++) {
 			// Shark
 			Point[] sharkPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
 					new Point(0.0, 0.0) };
-			Point sharkPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
+			Point sharkPosition = new Point(800.0, rand.nextInt(height)); // Right edge, random Y-coordinate
 			sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
-			if (wave == 2) {
+			if (wave == 2) { //second wave is faster
 				sharks.get(i).changeSpeed(0.5);
 			}
 
 			// Squid
 			Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
 					new Point(0.0, 0.0) };
-			Point squidPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
+			Point squidPosition = new Point(800.0, rand.nextInt(height)); // Right edge, random Y-coordinate
 			squids.add(new Squid(squidPoints, squidPosition, 0.0));
-			if (wave == 2) {
+			if (wave == 2) { //second wave is faster
 				squids.get(i).changeSpeed(0.5);
 			}
 		}
@@ -61,7 +60,6 @@ class SeaShooter extends Game implements KeyListener {
 	public void paint(Graphics brush) {
 		brush.setColor(Color.black);
 		brush.fillRect(0, 0, width, height);
-
 		counter++;
 		brush.setColor(Color.white);
 		brush.drawString("Counter is " + counter, 10, 10);
@@ -69,44 +67,81 @@ class SeaShooter extends Game implements KeyListener {
 		// Draw submarine
 		submarine.paint(brush);
 		submarine.move(up, down, right, left);
+		
 		// Draw projectiles
 		for (Projectile projectile : projectiles) {
 			projectile.paint(brush);
 			projectile.move();
+			
+			// Check if the missile hits sharks
+			for (Shark shark : sharks) {
+				if (shark.checkHit(projectile)) {
+					shark.takesDamage(projectile.getDamage());
+					projectiles.remove(projectile); // Remove the projectile after collision
+					break; // stop checking
+				}
+			}
+
+			// Check for collisions with squids
+			for (Squid squid : squids) {
+				if (squid.checkHit(projectile)) {
+					squid.takesDamage(projectile.getDamage());
+					projectiles.remove(projectile); // Remove the projectile after collision
+					break; // stop checking
+				}
+			}
 		}
+		
+		
 		// Draw sharks
 		for (Shark shark : sharks) {
 			shark.paint(brush);
-			shark.moveLeft(); // advance left
-			if (shark.checkCollision(submarine)) {
+			
+			if (shark.getHealth() <= 0) { //check if dead
+				sharks.remove(shark); // remove the shark from the list if health is 0
+				break;
+			}
+			if (shark.checkCollision(submarine)) { //check id the shark is hit
 				submarine.applyDamage(shark.getAttackDamage()); // Apply damage to submarine
 				System.out.println("Submarine hit. Remaining health: " + submarine.getHealth());
 			}
+			
+			shark.moveLeft(); // advance left
 		}
 
 		// Draw squids
 		for (Squid squid : squids) {
 			squid.paint(brush);
+			if (squid.getHealth() <= 0) { //check if the squid is dead
+				squids.remove(squid); // remove the squid from the list if health is 0
+				break; 
+			}
 			squid.moveLeft(); // advance left
 		}
+		
+		
+		//handle when all enemies are dead
 		if (sharks.isEmpty() && squids.isEmpty() && wave == 1) {
 			wave++;
 			spawnEnemies(); // Second wave
 			System.out.print("Second Wave!");
 		} else if (sharks.isEmpty() && squids.isEmpty() && wave == 2) {
-			System.out.print("You Win!!"); //wins after two waves
+			System.out.print("You Win!!"); // wins after two waves
 		}
+		
+		//handle when submarine is dead
 		if (submarine.getHealth() <= 0) {
+			System.out.print("You Lose :(");
 			on = false;
 		}
 	}
 
 	private void shootMissile() {
-		
-		 double missileAngle = submarine.getRotation(); // submarine's rotation angle
-	        Point missileStartPosition = new Point(submarine.getPosition().x + 30, submarine.getPosition().y); // adjust for a position in front of the submarine
-	        Projectile missile = new Missile(missileStartPosition, missileAngle);
-	        projectiles.add(missile);
+
+		double missileAngle = submarine.getRotation(); // submarine's rotation angle
+		Point missileStartPosition = new Point(submarine.getPosition().x + 30, submarine.getPosition().y); // adjust for front of sub																								
+		Projectile missile = new Missile(missileStartPosition, missileAngle); //create new missile, add to list
+		projectiles.add(missile);
 	}
 
 	@Override
@@ -141,7 +176,7 @@ class SeaShooter extends Game implements KeyListener {
 			left = false;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			shootMissile(); // Shoot missile on space key press
+			shootMissile(); // shoot missile on space key press
 		}
 		repaint();
 	}

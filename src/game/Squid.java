@@ -26,6 +26,9 @@ public class Squid extends Polygon implements Enemy {
     public int getAttackDamage() {
         return squidAttack;
     }
+    public int getHealth() {
+        return squidHealth;
+    }
     public void changeSpeed(double speed) {
     	this.speed = speed;
     }
@@ -44,5 +47,17 @@ public class Squid extends Polygon implements Enemy {
     }
     public void moveLeft() {
         this.position.x -= speed; //moves left
+    }
+    public boolean checkHit(Projectile projectile) {
+        Point squidPosition = this.position;
+        Point projectilePosition = projectile.position;
+
+        if (projectilePosition.x < squidPosition.x + 60 && 
+            projectilePosition.x + 10 > squidPosition.x && 
+            projectilePosition.y < squidPosition.y + 30 && 
+            projectilePosition.y + 5 > squidPosition.y) {
+            return true; // Collision detected
+        }
+        return false; // No collision
     }
 }

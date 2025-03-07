@@ -14,4 +14,7 @@ public class Missile extends Projectile {
         brush.setColor(Color.RED); // red
         brush.fillRect((int) position.x, (int) position.y, 10, 5); 
     }
+    public int getDamage() {
+        return damage;
+    }
 }
