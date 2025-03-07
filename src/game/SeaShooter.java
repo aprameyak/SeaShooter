@@ -34,21 +34,21 @@ class SeaShooter extends Game implements KeyListener {
 
 	private void spawnEnemies() {
 		Random rand = new Random();
-		// Spawn 3 sharks and squids
-		for (int i = 0; i < 3; i++) {
+		// Spawn 4 sharks and squids
+		for (int i = 0; i < 4; i++) {
 			// Shark
 			Point[] sharkPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
 					new Point(0.0, 0.0) };
-			Point sharkPosition = new Point(800.0, rand.nextInt(height)); // Right edge, random Y-coordinate
+			Point sharkPosition = new Point(800.0, rand.nextInt(height-30)); // Right edge, random Y-coordinate
 			sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
 			if (wave == 2) { //second wave is faster
-				sharks.get(i).changeSpeed(0.5);
+				sharks.get(i).changeSpeed(0.75);
 			}
 
 			// Squid
 			Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
 					new Point(0.0, 0.0) };
-			Point squidPosition = new Point(800.0, rand.nextInt(height)); // Right edge, random Y-coordinate
+			Point squidPosition = new Point(800.0, rand.nextInt(height-30)); // Right edge, random Y-coordinate
 			squids.add(new Squid(squidPoints, squidPosition, 0.0));
 			if (wave == 2) { //second wave is faster
 				squids.get(i).changeSpeed(0.5);
@@ -68,28 +68,43 @@ class SeaShooter extends Game implements KeyListener {
 		submarine.paint(brush);
 		submarine.move(up, down, right, left);
 		
-		// Draw projectiles
-		for (Projectile projectile : projectiles) {
-			projectile.paint(brush);
-			projectile.move();
-			
-			// Check if the missile hits sharks
-			for (Shark shark : sharks) {
-				if (shark.checkHit(projectile)) {
-					shark.takesDamage(projectile.getDamage());
-					projectiles.remove(projectile); // Remove the projectile after collision
-					break; // stop checking
-				}
-			}
+		// Draw projectiles, use while loop to avoid errors when list is modified
+		int i = 0;
+		while (i < projectiles.size()) {
+		    Projectile projectile = projectiles.get(i);
+		    projectile.paint(brush);
+		    projectile.move();
 
-			// Check for collisions with squids
-			for (Squid squid : squids) {
-				if (squid.checkHit(projectile)) {
-					squid.takesDamage(projectile.getDamage());
-					projectiles.remove(projectile); // Remove the projectile after collision
-					break; // stop checking
-				}
-			}
+		    // check if the missile hits sharks
+		    int j = 0;
+		    while (j < sharks.size()) {
+		        Shark shark = sharks.get(j);
+		        if (shark.checkHit(projectile)) {
+		            shark.takesDamage(projectile.getDamage());
+		            projectiles.remove(i); // remove the projectile after collision
+		            break; 
+		        } else {
+		            j++; // only increment if no removal happened
+		        }
+		    }
+
+		    // check for collisions with squids
+		    int k = 0;
+		    while (k < squids.size()) {
+		        Squid squid = squids.get(k);
+		        if (squid.checkHit(projectile)) {
+		            squid.takesDamage(projectile.getDamage());
+		            projectiles.remove(i); // remove the projectile after collision
+		            break; 
+		        } else {
+		            k++; // only increment if no removal happened
+		        }
+		    }
+
+		    // move to the next projectile
+		    if (projectiles.contains(projectile)) {
+		        i++;
+		    }
 		}
 		
 		
@@ -127,12 +142,13 @@ class SeaShooter extends Game implements KeyListener {
 			System.out.print("Second Wave!");
 		} else if (sharks.isEmpty() && squids.isEmpty() && wave == 2) {
 			System.out.print("You Win!!"); // wins after two waves
+			on = false;
 		}
 		
 		//handle when submarine is dead
 		if (submarine.getHealth() <= 0) {
 			System.out.print("You Lose :(");
-			on = false;
+			on = false; //ends game
 		}
 	}
 

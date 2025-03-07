@@ -7,7 +7,7 @@ public class Shark extends Polygon implements Enemy {
     private int sharkHealth = 100;
     private int sharkAttack = 15;  
     private boolean hasDamaged = false;
-    private double speed = 0.2;
+    private double speed = 0.5;
 
     @Override
     public void attack() {
