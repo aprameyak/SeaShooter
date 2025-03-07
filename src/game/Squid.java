@@ -12,8 +12,10 @@ public class Squid extends Polygon implements Enemy {
         super(squidPoints, squidPosition , squidRotation);
     }
 
-    public void isDamaged(int damage) {
-        squidHealth -= damage;
+    private final Damageable takeDamage = (damage) -> squidHealth -= damage;
+
+    public void applyDamage(int damage) {
+        takeDamage.applyDamage(damage);
     }
 
     public int getDamage() {

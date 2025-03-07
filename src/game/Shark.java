@@ -12,9 +12,12 @@ public class Shark extends Polygon implements Enemy {
         super(sharkPoints, sharkPosition , sharkRotation);
     }
 
-    public void isDamaged(int damage) {
-        sharkHealth -= damage;
+    private final Damageable takeDamage = (damage) -> sharkHealth -= damage;
+
+    public void applyDamage(int damage) {
+        takeDamage.applyDamage(damage);
     }
+
 
     public int getDamage() {
         return sharkHealth;

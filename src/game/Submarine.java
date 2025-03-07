@@ -13,8 +13,10 @@ public class Submarine extends Polygon{
         super(submarinePoints, submarinePosition , submarineRotation);
     }
 
-    public void isDamaged(int damage) {
-        submarineHealth -= damage;
+    private final Damageable takeDamage = (damage) -> submarineHealth -= damage;
+
+    public void applyDamage(int damage) {
+        takeDamage.applyDamage(damage);
     }
 
     public int getDamage() {
