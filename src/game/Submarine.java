@@ -21,6 +21,10 @@ public class Submarine extends Polygon{
         return submarineAttack;
     }
 
+    public int getHealth() {
+        return submarineHealth;
+    }
+
     public void paint(Graphics brush) {
         Point[] points = this.getPoints();
         int[] xPoints = new int[points.length];

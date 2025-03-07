@@ -38,6 +38,10 @@ class SeaShooter extends Game implements KeyListener{
     	brush.drawString("Counter is " + counter,10,10);
 		submarine.paint(brush);
 		submarine.move(up, right, left);
+		
+		if (submarine.getHealth() <= 0) {
+			on = false;
+		}
   }
 	@Override
   	public void keyPressed(KeyEvent e) {
