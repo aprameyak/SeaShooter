@@ -8,10 +8,13 @@ NOTE: This class is the metaphorical "main method" of your program,
 
 */
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-class SeaShooter extends Game {
+class SeaShooter extends Game implements KeyListener{
 	static int counter = 0;
 	private Submarine submarine;
+	public boolean up, right, left; 
 	
   public SeaShooter() {
     super("SeaShooter!",800,600);
@@ -19,6 +22,7 @@ class SeaShooter extends Game {
 	this.requestFocus();
 	Point[]	submarinePoints = {new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0)};
 	submarine = new Submarine(submarinePoints, new Point(300.0, 300.0), 0.0);
+	this.addKeyListener(this);
   }
   
 	@Override
@@ -33,10 +37,43 @@ class SeaShooter extends Game {
     	brush.setColor(Color.white);
     	brush.drawString("Counter is " + counter,10,10);
 		submarine.paint(brush);
+		submarine.move(up, right, left);
   }
-  
+	@Override
+  	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_UP) {
+			up = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			right = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+			left = true;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_UP) {
+			up = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			right = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+			left = false;
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
 	public static void main (String[] args) {
    		SeaShooter a = new SeaShooter();	
 		a.repaint();
   }
+
+	
+
 }
