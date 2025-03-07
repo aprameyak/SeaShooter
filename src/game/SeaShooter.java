@@ -3,10 +3,14 @@ package game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 class SeaShooter extends Game implements KeyListener {
 	static int counter = 0;
 	private Submarine submarine;
+    private ArrayList<Shark> sharks;
+    private ArrayList<Squid> squids;
 	public boolean up, down, right, left;
 
 	public SeaShooter() {
@@ -15,28 +19,58 @@ class SeaShooter extends Game implements KeyListener {
 		this.requestFocus();
 		Point[] submarinePoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0) };
 		submarine = new Submarine(submarinePoints, new Point(300.0, 300.0), 0.0);
+		 // Create sharks and squids
+        sharks = new ArrayList<>();
+        squids = new ArrayList<>();
+
+       spawnEnemies();
 		this.addKeyListener(this);
 	}
+	 private void spawnEnemies() {
+	        Random rand = new Random();
+
+	        // Spawn 3 sharks and squids for now
+	        for (int i = 0; i < 3; i++) {
+	            // Shark
+	            Point[] sharkPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0) };
+	            Point sharkPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
+	            sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
+
+	            // Squid
+	            Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0) };
+	            Point squidPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
+	            squids.add(new Squid(squidPoints, squidPosition, 0.0));
+	        }
+	    }
 
 	@Override
 	public void paint(Graphics brush) {
-		brush.setColor(Color.black);
-		brush.fillRect(0, 0, width, height);
+	    brush.setColor(Color.black);
+	    brush.fillRect(0, 0, width, height);
 
-		// sample code for printing message for debugging
-		// counter is incremented and this message printed
-		// each time the canvas is repainted
-		counter++;
-		brush.setColor(Color.white);
-		brush.drawString("Counter is " + counter, 10, 10);
-		submarine.paint(brush);
-		submarine.move(up, down, right, left);
+	    counter++;
+	    brush.setColor(Color.white);
+	    brush.drawString("Counter is " + counter, 10, 10);
 
-		if (submarine.getHealth() <= 0) {
-			on = false;
-		}
-		repaint(); // continuous movement updates
+	    // Draw submarine
+	    submarine.paint(brush);
+	    submarine.move(up, down, right, left);
+
+	    // Draw sharks
+	    for (Shark shark : sharks) {
+	        shark.paint(brush);
+	    }
+
+	    // Draw squids
+	    for (Squid squid : squids) {
+	        squid.paint(brush);
+	    }
+
+	    if (submarine.getHealth() <= 0) {
+	        on = false;
+	    }
 	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e) {

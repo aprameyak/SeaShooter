@@ -1,5 +1,8 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Squid extends Polygon implements Enemy {
     private int squidHealth = 100;
     private int squidAttack = 10;
@@ -20,5 +23,18 @@ public class Squid extends Polygon implements Enemy {
 
     public int getDamage() {
         return squidAttack;
+    }
+    public void paint(Graphics brush) {
+        Point[] points = this.getPoints();
+        int[] xPoints = new int[points.length];
+        int[] yPoints = new int[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            xPoints[i] = (int) points[i].x;
+            yPoints[i] = (int) points[i].y;
+        }
+
+        brush.setColor(Color.CYAN); // Squids are cyan
+        brush.fillPolygon(xPoints, yPoints, points.length);
     }
 }
