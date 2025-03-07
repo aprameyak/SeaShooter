@@ -60,4 +60,7 @@ public class Submarine extends Polygon{
     public Point getPosition() {
         return this.position;
     }
+    public double getRotation() {
+    	return this.rotation;
+    }
 }
