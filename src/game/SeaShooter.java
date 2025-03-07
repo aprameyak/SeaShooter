@@ -59,11 +59,17 @@ class SeaShooter extends Game implements KeyListener {
 	    // Draw sharks
 	    for (Shark shark : sharks) {
 	        shark.paint(brush);
+	        shark.moveLeft(); //advance left
+	        if (shark.checkCollision(submarine)) {
+                submarine.applyDamage(shark.getAttackDamage()); // Apply damage to submarine
+                System.out.println("Submarine hit. Remaining health: " + submarine.getHealth());
+            }
 	    }
 
 	    // Draw squids
 	    for (Squid squid : squids) {
 	        squid.paint(brush);
+	        squid.moveLeft(); //advance left
 	    }
 
 	    if (submarine.getHealth() <= 0) {

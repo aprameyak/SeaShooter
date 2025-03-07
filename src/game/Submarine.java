@@ -57,4 +57,7 @@ public class Submarine extends Polygon{
             this.rotation -= ROTATE_AMOUNT;
         }
     }
+    public Point getPosition() {
+        return this.position;
+    }
 }

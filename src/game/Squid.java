@@ -17,11 +17,11 @@ public class Squid extends Polygon implements Enemy {
 
     private final Damageable takeDamage = (damage) -> squidHealth -= damage;
 
-    public void applyDamage(int damage) {
+    public void takesDamage(int damage) {
         takeDamage.applyDamage(damage);
     }
 
-    public int getDamage() {
+    public int getAttackDamage() {
         return squidAttack;
     }
     public void paint(Graphics brush) {
@@ -36,5 +36,8 @@ public class Squid extends Polygon implements Enemy {
 
         brush.setColor(Color.CYAN); // Squids are cyan
         brush.fillPolygon(xPoints, yPoints, points.length);
+    }
+    public void moveLeft() {
+        this.position.x -= 0.2; //moves left
     }
 }
