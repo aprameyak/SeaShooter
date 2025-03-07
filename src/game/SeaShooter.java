@@ -12,6 +12,7 @@ class SeaShooter extends Game implements KeyListener {
     private ArrayList<Shark> sharks;
     private ArrayList<Squid> squids;
 	public boolean up, down, right, left;
+	private int wave =1;
 
 	public SeaShooter() {
 		super("SeaShooter!", 800, 600);
@@ -35,11 +36,17 @@ class SeaShooter extends Game implements KeyListener {
 	            Point[] sharkPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0) };
 	            Point sharkPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
 	            sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
+	            if (wave==2) {
+	            sharks.get(i).changeSpeed(0.5);
+	            }
 
 	            // Squid
 	            Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0), new Point(0.0, 0.0) };
 	            Point squidPosition = new Point(800.0, rand.nextInt(height)); // Random Y-coordinate
 	            squids.add(new Squid(squidPoints, squidPosition, 0.0));
+	            if (wave==2) {
+		            squids.get(i).changeSpeed(0.5);
+		            }
 	        }
 	    }
 
@@ -71,7 +78,14 @@ class SeaShooter extends Game implements KeyListener {
 	        squid.paint(brush);
 	        squid.moveLeft(); //advance left
 	    }
-
+	    if (sharks.isEmpty() && squids.isEmpty() && wave == 1) {
+	        wave++;
+	    	spawnEnemies(); // Second wave
+	        System.out.print("Second Wave!");
+	    }
+	    else if (sharks.isEmpty() && squids.isEmpty() && wave == 1) {
+	    	System.out.print("You Win!!");
+	    }
 	    if (submarine.getHealth() <= 0) {
 	        on = false;
 	    }

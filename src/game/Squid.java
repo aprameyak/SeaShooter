@@ -6,6 +6,8 @@ import java.awt.Graphics;
 public class Squid extends Polygon implements Enemy {
     private int squidHealth = 100;
     private int squidAttack = 10;
+    private double speed = 0.2;
+
 
     @Override
     public void attack() {
@@ -24,6 +26,9 @@ public class Squid extends Polygon implements Enemy {
     public int getAttackDamage() {
         return squidAttack;
     }
+    public void changeSpeed(double speed) {
+    	this.speed = speed;
+    }
     public void paint(Graphics brush) {
         Point[] points = this.getPoints();
         int[] xPoints = new int[points.length];
@@ -38,6 +43,6 @@ public class Squid extends Polygon implements Enemy {
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
     public void moveLeft() {
-        this.position.x -= 0.2; //moves left
+        this.position.x -= speed; //moves left
     }
 }

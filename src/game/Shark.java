@@ -5,8 +5,9 @@ import java.awt.Graphics;
 
 public class Shark extends Polygon implements Enemy {
     private int sharkHealth = 100;
-    private int sharkAttack = 10;  
+    private int sharkAttack = 15;  
     private boolean hasDamaged = false;
+    private double speed = 0.2;
 
     @Override
     public void attack() {
@@ -27,6 +28,10 @@ public class Shark extends Polygon implements Enemy {
         return sharkAttack;
     }
     
+    public void changeSpeed(double speed) {
+    	this.speed = speed;
+    }
+    
     public void paint(Graphics brush) {
         Point[] points = this.getPoints();
         int[] xPoints = new int[points.length];
@@ -41,7 +46,7 @@ public class Shark extends Polygon implements Enemy {
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
     public void moveLeft() {
-        this.position.x -= 0.2; //moves left
+        this.position.x -= speed; //moves left
     }
     public boolean checkCollision(Submarine submarine) {
         // Check if the shark's location overlaps with the submarine's location
