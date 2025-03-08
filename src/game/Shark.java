@@ -13,8 +13,9 @@ public class Shark extends Polygon implements Enemy {
     public void attack() {
         System.out.println("The shark attacks!");
     }
+
     public Shark(Point[] sharkPoints, Point sharkPosition, double sharkRotation) {
-        super(sharkPoints, sharkPosition , sharkRotation);
+        super(sharkPoints, sharkPosition, sharkRotation);
     }
 
     private final Damageable takeDamage = (damage) -> sharkHealth -= damage;
@@ -28,13 +29,14 @@ public class Shark extends Polygon implements Enemy {
     public int getAttackDamage() {
         return SHARK_ATTACK;
     }
+
     public int getHealth() {
         return sharkHealth;
     }
     
     @Override
     public void changeSpeed(double speed) {
-    	this.speed = speed;
+        this.speed = speed;
     }
     
     public void paint(Graphics brush) {
@@ -58,6 +60,7 @@ public class Shark extends Polygon implements Enemy {
     public double getPosition() {
         return this.position.x;
     }
+
     public boolean checkCollision(Submarine submarine) {
         // Check if the shark's location overlaps with the submarine's location, a bite
         Point sharkPosition = this.position;
@@ -80,8 +83,8 @@ public class Shark extends Polygon implements Enemy {
         Point projectilePosition = projectile.position;
 
         return projectilePosition.x < sharkPosition.x + 60 && 
-            projectilePosition.x + 10 > sharkPosition.x && 
-            projectilePosition.y < sharkPosition.y + 30 && 
-            projectilePosition.y + 5 > sharkPosition.y;
+               projectilePosition.x + 10 > sharkPosition.x && 
+               projectilePosition.y < sharkPosition.y + 30 && 
+               projectilePosition.y + 5 > sharkPosition.y;
     }
 }

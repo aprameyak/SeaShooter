@@ -13,11 +13,10 @@ public class Squid extends Polygon implements Enemy {
 
     @Override
     public void attack() {
-    	long currentTime = System.currentTimeMillis();  // Get the current time 
+        long currentTime = System.currentTimeMillis();  // Get the current time 
         
         // Check if enough time has passed since the last ink shot
         if (currentTime - lastInkShotTime >= INK_COOLDOWN) {
-          
             Point inkStartPosition = new Point(this.position.x, this.position.y); // Start position of the ink at the squid
 
             // Create a new SquidInk and add it to the ink list
@@ -55,8 +54,9 @@ public class Squid extends Polygon implements Enemy {
 
     @Override
     public void changeSpeed(double speed) {
-    	this.speed = speed;
+        this.speed = speed;
     }
+
     public void paint(Graphics brush) {
         Point[] points = this.getPoints();
         int[] xPoints = new int[points.length];
@@ -70,13 +70,15 @@ public class Squid extends Polygon implements Enemy {
         brush.setColor(Color.CYAN); // Squids are cyan
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
+
     public void moveLeft() {
         this.position.x -= speed; //moves left
-        
     }
+
     public void fireInk() {
         attack();  // Fire ink without affecting squid movement
     }
+
     public boolean checkHit(Projectile projectile) {
         Point squidPosition = this.position;
         Point projectilePosition = projectile.position;
