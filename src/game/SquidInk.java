@@ -23,7 +23,7 @@ public class SquidInk extends Projectile {
     // Paint the squid ink on the screen (draw it as a rectangle)
     @Override
     public void paint(Graphics brush) {
-        brush.setColor(Color.BLUE); // Squid ink is purple/magenta
+        brush.setColor(Color.BLACK); // Squid ink is purple/magenta
 
         // Draw the squid ink
         brush.fillRect((int) position.x, (int) position.y, INK_WIDTH, INK_HEIGHT);

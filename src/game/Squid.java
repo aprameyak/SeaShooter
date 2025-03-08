@@ -7,7 +7,7 @@ public class Squid extends Polygon implements Enemy {
     private final int SQUID_ATTACK = 10;
     private final int INK_COOLDOWN = 1500;  // Cooldown period 
     private int squidHealth = 100;
-    private double speed = 0.2;
+    private double speed = 0.3;
     private SeaShooter seaShooter;
     private long lastInkShotTime = 0;  // Time of the last ink shot
 

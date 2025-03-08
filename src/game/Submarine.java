@@ -37,7 +37,7 @@ public class Submarine extends Polygon{
             yPoints[i] = (int) points[i].y;
         }
 
-        brush.setColor(Color.MAGENTA);
+        brush.setColor(Color.GRAY);
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
 

@@ -66,7 +66,7 @@ class SeaShooter extends Game implements KeyListener {
 			Point sharkPosition = new Point(800.0, rand.nextInt(height-40)); // Right edge, random Y-coordinate
 			sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
 			if (wave == 2) { //second wave is faster
-				sharks.get(i).changeSpeed(0.75);
+				sharks.get(i).changeSpeed(0.8);
 			}
 
 			// Squid
@@ -75,7 +75,7 @@ class SeaShooter extends Game implements KeyListener {
 			 Squid squid = new Squid(squidPoints, squidPosition, 0.0, this);
 			 squids.add(squid);
 			if (wave == 2) { //second wave is faster
-				squids.get(i).changeSpeed(0.5);
+				squids.get(i).changeSpeed(0.65);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ class SeaShooter extends Game implements KeyListener {
             currentMessage = null;
         }
 
-		brush.setColor(Color.black);
+		brush.setColor(Color.BLUE);
 		brush.fillRect(0, 0, width, height);
 		counter++;
 		brush.setColor(Color.white);
@@ -178,14 +178,16 @@ class SeaShooter extends Game implements KeyListener {
             }
 		}
 		// Draw ink projectiles
-		for (SquidInk ink : inks) {
+		for (int j = 0; j < inks.size(); j++) {
+		    SquidInk ink = inks.get(j);
 		    ink.paint(brush); // Draw the ink
 		    ink.move(); // Move the ink
-		    // Check if the ink hits the submarine or other objects
+		    
+		    // Check if the ink hits the submarine
 		    if (ink.checkHit(submarine)) {
-		        submarine.applyDamage(ink.getDamage()); // Apply damage if hit
-		        inks.remove(ink); // Remove ink after collision
-		        break; // Break to avoid concurrent modification
+		        submarine.applyDamage(ink.getDamage()); // Apply damage to submarine
+		        inks.remove(j); // Remove ink after collision
+		        j--; // Adjust index after removal to avoid skipping elements
 		    }
 		}
 		
