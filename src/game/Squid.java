@@ -39,6 +39,10 @@ public class Squid extends Polygon implements Enemy {
         takeDamage.applyDamage(damage);
     }
 
+    public double getPosition() {
+        return this.position.x;
+    }
+
     public int getAttackDamage() {
         return squidAttack;
     }

@@ -125,6 +125,11 @@ class SeaShooter extends Game implements KeyListener {
 			}
 			
 			shark.moveLeft(); // advance left
+			if (shark.getPosition() <= 0) { // Check if shark hits the left side
+                System.out.print("You Lose :(");
+                on = false;
+                break;
+            }
 		}
 
 		// Draw squids
@@ -136,6 +141,11 @@ class SeaShooter extends Game implements KeyListener {
 			}
 			squid.moveLeft(); // advance left
 			squid.fireInk(); //shoot
+			if (squid.getPosition() <= 0) { // Check if squid hits the left side
+                System.out.print("You Lose :(");
+                on = false;
+                break;
+            }
 		}
 		// Draw ink projectiles
 		for (SquidInk ink : inks) {

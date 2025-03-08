@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class SquidInk extends Projectile {
-    private int damage;  // Damage value for the squid ink
+    private int damage = 5;
     private int width = 10; 
     private int height = 5;  
     private int speed = 2;

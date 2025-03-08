@@ -48,8 +48,13 @@ public class Shark extends Polygon implements Enemy {
         brush.setColor(Color.RED); // Sharks are red
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
+
     public void moveLeft() {
         this.position.x -= speed; //moves left
+    }
+
+    public double getPosition() {
+        return this.position.x;
     }
     public boolean checkCollision(Submarine submarine) {
         // Check if the shark's location overlaps with the submarine's location, a bite
