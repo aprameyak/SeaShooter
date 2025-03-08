@@ -28,8 +28,8 @@ public class Squid extends Polygon implements Enemy {
             lastInkShotTime = currentTime;
         }
     }
-    public Squid(Point[] squidPoints, Point squidPosition, double squidRotation,SeaShooter seaShooter ) {
-        super(squidPoints, squidPosition , squidRotation);
+    public Squid(Point[] squidPoints, Point squidPosition, double squidRotation, SeaShooter seaShooter) {
+        super(squidPoints, squidPosition, squidRotation);
         this.seaShooter = seaShooter;
     }
 

@@ -20,8 +20,18 @@ class SeaShooter extends Game implements KeyListener {
 		super("SeaShooter!", 800, 600);
 		this.setFocusable(true);
 		this.requestFocus();
-		Point[] submarinePoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
-				new Point(0.0, 0.0) };
+		Point[] submarinePoints = { 
+            new Point(0.0, 0.0), 
+            new Point(60.0, 0.0), 
+            new Point(60.0, 20.0), 
+            new Point(50.0, 30.0), 
+            new Point(10.0, 30.0), 
+            new Point(0.0, 20.0),
+            new Point(10.0, 10.0),
+            new Point(50.0, 10.0),
+            new Point(60.0, 20.0),
+            new Point(0.0, 20.0)
+        };
 		// initialize submarine and its missiles
 		submarine = new Submarine(submarinePoints, new Point(300.0, 300.0), 0.0);
 		projectiles = new ArrayList<>();
@@ -39,18 +49,16 @@ class SeaShooter extends Game implements KeyListener {
 		// Spawn 4 sharks and squids
 		for (int i = 0; i < 4; i++) {
 			// Shark
-			Point[] sharkPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
-					new Point(0.0, 0.0) };
-			Point sharkPosition = new Point(800.0, rand.nextInt(height-30)); // Right edge, random Y-coordinate
+			Point[] sharkPoints = { new Point(0.0, 0.0), new Point(30.0, 10.0), new Point(60.0, 0.0), new Point(50.0, 20.0), new Point(60.0, 40.0), new Point(30.0, 30.0), new Point(0.0, 40.0) };
+			Point sharkPosition = new Point(800.0, rand.nextInt(height-40)); // Right edge, random Y-coordinate
 			sharks.add(new Shark(sharkPoints, sharkPosition, 0.0));
 			if (wave == 2) { //second wave is faster
 				sharks.get(i).changeSpeed(0.75);
 			}
 
 			// Squid
-			Point[] squidPoints = { new Point(60.0, 0.0), new Point(60.0, 30.0), new Point(0.0, 30.0),
-					new Point(0.0, 0.0) };
-			Point squidPosition = new Point(800.0, rand.nextInt(height-30)); // Right edge, random Y-coordinate
+			Point[] squidPoints = { new Point(0.0, 0.0), new Point(20.0, 10.0), new Point(40.0, 0.0), new Point(30.0, 20.0), new Point(40.0, 40.0), new Point(20.0, 30.0), new Point(0.0, 40.0) };
+			Point squidPosition = new Point(800.0, rand.nextInt(height-40)); // Right edge, random Y-coordinate
 			 Squid squid = new Squid(squidPoints, squidPosition, 0.0, this);
 			 squids.add(squid);
 			if (wave == 2) { //second wave is faster
@@ -119,7 +127,7 @@ class SeaShooter extends Game implements KeyListener {
 				sharks.remove(shark); // remove the shark from the list if health is 0
 				break;
 			}
-			if (shark.checkCollision(submarine)) { //check id the shark is hit
+			if (shark.checkCollision(submarine)) { //check if the shark is hit
 				submarine.applyDamage(shark.getAttackDamage()); // Apply damage to submarine
 				System.out.println("Submarine hit. Remaining health: " + submarine.getHealth());
 			}
