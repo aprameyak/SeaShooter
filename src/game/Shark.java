@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Shark extends Polygon implements Enemy {
     private int sharkHealth = 100;
-    private int sharkAttack = 15;  
+    private final int SHARK_ATTACK = 15;  
     private boolean hasDamaged = false;
     private double speed = 0.5;
 
@@ -19,18 +19,20 @@ public class Shark extends Polygon implements Enemy {
 
     private final Damageable takeDamage = (damage) -> sharkHealth -= damage;
 
+    @Override
     public void takesDamage(int damage) {
         takeDamage.applyDamage(damage);
     }
 
-
+    @Override
     public int getAttackDamage() {
-        return sharkAttack;
+        return SHARK_ATTACK;
     }
     public int getHealth() {
         return sharkHealth;
     }
     
+    @Override
     public void changeSpeed(double speed) {
     	this.speed = speed;
     }
@@ -77,12 +79,9 @@ public class Shark extends Polygon implements Enemy {
         Point sharkPosition = this.position;
         Point projectilePosition = projectile.position;
 
-        if (projectilePosition.x < sharkPosition.x + 60 && 
+        return projectilePosition.x < sharkPosition.x + 60 && 
             projectilePosition.x + 10 > sharkPosition.x && 
             projectilePosition.y < sharkPosition.y + 30 && 
-            projectilePosition.y + 5 > sharkPosition.y) {
-            return true; // Collision detected
-        }
-        return false; // No collision
+            projectilePosition.y + 5 > sharkPosition.y;
     }
 }

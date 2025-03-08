@@ -4,19 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Squid extends Polygon implements Enemy {
+    private final int SQUID_ATTACK = 10;
+    private final int INK_COOLDOWN = 1500;  // Cooldown period 
     private int squidHealth = 100;
-    private int squidAttack = 10;
     private double speed = 0.2;
     private SeaShooter seaShooter;
     private long lastInkShotTime = 0;  // Time of the last ink shot
-    private int inkCooldown = 1500;  // Cooldown period 
 
-    
+    @Override
     public void attack() {
     	long currentTime = System.currentTimeMillis();  // Get the current time 
         
         // Check if enough time has passed since the last ink shot
-        if (currentTime - lastInkShotTime >= inkCooldown) {
+        if (currentTime - lastInkShotTime >= INK_COOLDOWN) {
           
             Point inkStartPosition = new Point(this.position.x, this.position.y); // Start position of the ink at the squid
 
@@ -28,6 +28,7 @@ public class Squid extends Polygon implements Enemy {
             lastInkShotTime = currentTime;
         }
     }
+
     public Squid(Point[] squidPoints, Point squidPosition, double squidRotation, SeaShooter seaShooter) {
         super(squidPoints, squidPosition, squidRotation);
         this.seaShooter = seaShooter;
@@ -35,6 +36,7 @@ public class Squid extends Polygon implements Enemy {
 
     private final Damageable takeDamage = (damage) -> squidHealth -= damage;
 
+    @Override
     public void takesDamage(int damage) {
         takeDamage.applyDamage(damage);
     }
@@ -43,12 +45,15 @@ public class Squid extends Polygon implements Enemy {
         return this.position.x;
     }
 
+    @Override
     public int getAttackDamage() {
-        return squidAttack;
+        return SQUID_ATTACK;
     }
     public int getHealth() {
         return squidHealth;
     }
+
+    @Override
     public void changeSpeed(double speed) {
     	this.speed = speed;
     }
@@ -76,12 +81,9 @@ public class Squid extends Polygon implements Enemy {
         Point squidPosition = this.position;
         Point projectilePosition = projectile.position;
 
-        if (projectilePosition.x < squidPosition.x + 60 && 
-            projectilePosition.x + 10 > squidPosition.x && 
-            projectilePosition.y < squidPosition.y + 30 && 
-            projectilePosition.y + 5 > squidPosition.y) {
-            return true; // Collision detected
-        }
-        return false; // No collision
+        return projectilePosition.x < squidPosition.x + 60 && 
+               projectilePosition.x + 10 > squidPosition.x && 
+               projectilePosition.y < squidPosition.y + 30 && 
+               projectilePosition.y + 5 > squidPosition.y;
     }
 }

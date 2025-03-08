@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Submarine extends Polygon{
     private int submarineHealth = 100;
-    private int submarineAttack = 10;
+    private final int SUBMARINE_ATTACK = 10;
     public final int MOVE_AMOUNT = 1;
     public final int ROTATE_AMOUNT = 1;
     
@@ -20,7 +20,7 @@ public class Submarine extends Polygon{
     }
 
     public int getDamage() {
-        return submarineAttack;
+        return SUBMARINE_ATTACK;
     }
 
     public int getHealth() {

@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class SquidInk extends Projectile {
+    private final int INK_WIDTH = 10; 
+    private final int INK_HEIGHT = 5;  
+    private final int INK_SPEED = 2;
     private int damage = 5;
-    private int width = 10; 
-    private int height = 5;  
-    private int speed = 2;
    
     public SquidInk(Point position, double angle) {
         super(position, angle, 2, 10); // Speed, Damage 
@@ -15,6 +15,7 @@ public class SquidInk extends Projectile {
     }
 
     // Get the damage value of the squid ink
+    @Override   
     public int getDamage() {
         return damage;
     }
@@ -25,12 +26,13 @@ public class SquidInk extends Projectile {
         brush.setColor(Color.BLUE); // Squid ink is purple/magenta
 
         // Draw the squid ink
-        brush.fillRect((int) position.x, (int) position.y, width, height);
+        brush.fillRect((int) position.x, (int) position.y, INK_WIDTH, INK_HEIGHT);
     }
 
     // Move the squid ink projectile
+    @Override
     public void move() {
-        this.position.x -= speed; 
+        this.position.x -= INK_SPEED; 
     }
 
     // Check if the squid ink hits the submarine
@@ -40,9 +42,9 @@ public class SquidInk extends Projectile {
 
             // Check if the rectangle of the squid ink intersects with the submarine's rectangle
             return this.position.x < submarine.getPosition().x + 60 &&
-                   this.position.x + width > submarine.getPosition().x &&
+                   this.position.x + INK_WIDTH > submarine.getPosition().x &&
                    this.position.y < submarine.getPosition().y + 30 &&
-                   this.position.y + height > submarine.getPosition().y;
+                   this.position.y + INK_HEIGHT > submarine.getPosition().y;
         }
         return false;
     }
