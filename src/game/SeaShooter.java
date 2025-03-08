@@ -15,6 +15,17 @@ class SeaShooter extends Game implements KeyListener {
 	private int wave = 1;
 	private ArrayList<Projectile> projectiles;
 	private ArrayList<SquidInk> inks;
+	private GameStatus gameStatus = new GameStatus() {
+        @Override
+        public void gameStatus(String status, Graphics g) {
+            g.setColor(Color.black);
+            g.fillRect(0, 0, width, height);
+            g.setColor(Color.white);
+            g.drawString(status, 350, 300); // Example coordinates for center of the canvas
+        }
+    };
+    private long messageDisplayTime = 0;
+    private String currentMessage = null;
 
 	public SeaShooter() {
 		super("SeaShooter!", 800, 600);
@@ -42,6 +53,8 @@ class SeaShooter extends Game implements KeyListener {
 		spawnEnemies(); //populate
 	
 		this.addKeyListener(this);
+
+		
 	}
 
 	private void spawnEnemies() {
@@ -69,6 +82,13 @@ class SeaShooter extends Game implements KeyListener {
 
 	@Override
 	public void paint(Graphics brush) {
+        if (currentMessage != null && System.currentTimeMillis() - messageDisplayTime < 2000) {
+            gameStatus.gameStatus(currentMessage, brush);
+            return;
+        } else {
+            currentMessage = null;
+        }
+
 		brush.setColor(Color.black);
 		brush.fillRect(0, 0, width, height);
 		counter++;
@@ -134,7 +154,8 @@ class SeaShooter extends Game implements KeyListener {
 			
 			shark.moveLeft(); // advance left
 			if (shark.getPosition() <= 0) { // Check if shark hits the left side
-                System.out.print("You Lose :(");
+                currentMessage = "You Lose :(";
+                messageDisplayTime = System.currentTimeMillis();
                 on = false;
                 break;
             }
@@ -150,7 +171,8 @@ class SeaShooter extends Game implements KeyListener {
 			squid.moveLeft(); // advance left
 			squid.fireInk(); //shoot
 			if (squid.getPosition() <= 0) { // Check if squid hits the left side
-                System.out.print("You Lose :(");
+                currentMessage = "You Lose :(";
+                messageDisplayTime = System.currentTimeMillis();
                 on = false;
                 break;
             }
@@ -172,16 +194,19 @@ class SeaShooter extends Game implements KeyListener {
 		if (sharks.isEmpty() && squids.isEmpty() && wave == 1) {
 			wave++;
 			spawnEnemies(); // Second wave
-			System.out.print("Second Wave!");
+			currentMessage = "Second Wave!";
+            messageDisplayTime = System.currentTimeMillis();
 		} else if (sharks.isEmpty() && squids.isEmpty() && wave == 2) {
-			System.out.print("You Win!!"); // wins after two waves
-			on = false;
+			currentMessage = "You Win!!"; // wins after two waves
+            messageDisplayTime = System.currentTimeMillis();
+            on = false;
 		}
 		
 		//handle when submarine is dead
 		if (submarine.getHealth() <= 0) {
-			System.out.print("You Lose :(");
-			on = false; //ends game
+			currentMessage = "You Lose :(";
+            messageDisplayTime = System.currentTimeMillis();
+            on = false; //ends game
 		}
 	}
 
