@@ -28,6 +28,7 @@ public abstract class Projectile {
         // check if the projectile collides with a target
         return target.contains(this.position);
     }
+    
     public int getDamage() {
         return damage;
     }
