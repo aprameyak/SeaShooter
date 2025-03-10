@@ -21,13 +21,7 @@ class SeaShooter extends Game implements KeyListener {
 			g.setColor(Color.black);
 			g.fillRect(0, 0, width, height);
 			g.setColor(Color.white);
-			g.drawString(status, 350, 300); // Example
-											// coordinates
-											// for
-											// center
-											// of
-											// the
-											// canvas
+			g.drawString(status, 350, 300); 
 		}
 	};
 	private long messageDisplayTime = 0;
