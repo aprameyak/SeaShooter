@@ -6,8 +6,8 @@ import java.awt.Graphics;
 public class Submarine extends Polygon{
     private int submarineHealth = 100;
     private final int SUBMARINE_ATTACK = 10;
-    public final int MOVE_AMOUNT = 1;
-    public final int ROTATE_AMOUNT = 1;
+    private final int MOVE_AMOUNT = 1;
+    private final int ROTATE_AMOUNT = 1;
     
     public Submarine(Point[] submarinePoints, Point submarinePosition, double submarineRotation) {
         super(submarinePoints, submarinePosition , submarineRotation);
