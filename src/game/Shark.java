@@ -51,7 +51,7 @@ public class Shark extends Polygon implements Enemy {
             yPoints[i] = (int) points[i].y;
         }
 
-        brush.setColor(Color.RED); // Sharks are red
+        brush.setColor(Color.GRAY); // Sharks are red
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
 

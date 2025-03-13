@@ -68,7 +68,7 @@ public class Squid extends Polygon implements Enemy {
             yPoints[i] = (int) points[i].y;
         }
 
-        brush.setColor(Color.CYAN); // Squids are cyan
+        brush.setColor(Color.ORANGE); // Squids 
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
 
