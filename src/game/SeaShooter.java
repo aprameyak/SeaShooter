@@ -15,13 +15,30 @@ class SeaShooter extends Game implements KeyListener {
 	private int wave = 1;
 	private ArrayList<Projectile> projectiles;
 	private ArrayList<SquidInk> inks;
+	private int messageLength = 5000;
+	private Color messageColor = Color.black;
+
 	private GameStatus gameStatus = new GameStatus() {
 		@Override
 		public void gameStatus(String status, Graphics g) {
-			g.setColor(Color.black);
+
+			int top = 250;
+			g.setColor(messageColor);
 			g.fillRect(0, 0, width, height);
 			g.setColor(Color.white);
-			g.drawString(status, 350, 300); 
+			Font font = new Font("Arial", Font.BOLD, 24);
+			g.setFont(font);
+			String[] lines = status.split("\n");
+			FontMetrics metrics = g.getFontMetrics(font);
+
+			if (wave == 1) {
+				for (String line : lines) {
+					g.drawString(line, 75, top);
+					top += 30; // move down for the next line
+				}
+			} else {
+				g.drawString(status, 325, 300);
+			}
 		}
 	};
 	private long messageDisplayTime = 0;
@@ -63,7 +80,10 @@ class SeaShooter extends Game implements KeyListener {
 			Point squidPosition = new Point(800.0, rand.nextInt(height - 40)); // Right edge, random Y-coordinate
 			Squid squid = new Squid(squidPoints, squidPosition, 0.0, this);
 			squids.add(squid);
-			if (wave == 2) { // second wave is faster
+			if (wave == 1) {
+				currentMessage = "Sea Shooter: You are a submarine. \nUse Arrows to move and hit Space to shoot missiles.\nShoot the Sharks and Squids before they reach the edge. \nAvoid Sharks and Ink Blasts!";
+				messageDisplayTime = System.currentTimeMillis();
+			} else if (wave == 2) { // second wave is faster
 				sharks.get(i).changeSpeed(0.8);
 				squids.get(i).changeSpeed(0.65);
 
@@ -77,7 +97,7 @@ class SeaShooter extends Game implements KeyListener {
 
 	@Override
 	public void paint(Graphics brush) {
-		if (currentMessage != null && System.currentTimeMillis() - messageDisplayTime < 2000) {
+		if (currentMessage != null && System.currentTimeMillis() - messageDisplayTime < messageLength) {
 			gameStatus.gameStatus(currentMessage, brush);
 			return;
 		} else {
@@ -94,7 +114,7 @@ class SeaShooter extends Game implements KeyListener {
 		submarine.paint(brush);
 		submarine.move(up, down, right, left);
 
-		// Draw projectiles, use while loop to avoid errors when list is modified
+		// draw projectiles, use while loop to avoid errors when list is modified
 		int i = 0;
 		while (i < projectiles.size()) {
 			Projectile projectile = projectiles.get(i);
@@ -147,10 +167,12 @@ class SeaShooter extends Game implements KeyListener {
 			}
 
 			shark.moveLeft(); // advance left
-			if (shark.getPosition() <= 0) { // Check if shark hits the left side
+			if (shark.getPosition() <= 0) { // check if shark hits the left side
 				currentMessage = "You Lose :(";
+				messageColor = Color.RED;
+				wave += 5;
 				messageDisplayTime = System.currentTimeMillis();
-				on = false;
+
 				break;
 			}
 		}
@@ -165,23 +187,26 @@ class SeaShooter extends Game implements KeyListener {
 			squid.moveLeft(); // advance left
 			squid.fireInk(); // shoot
 			if (squid.getPosition() <= 0) { // Check if squid hits the left side
+				wave += 5;
 				currentMessage = "You Lose :(";
+				messageColor = Color.RED;
 				messageDisplayTime = System.currentTimeMillis();
-				on = false;
+
 				break;
 			}
 		}
-		// Draw ink projectiles
+		// draw ink projectiles
 		for (int j = 0; j < inks.size(); j++) {
 			SquidInk ink = inks.get(j);
-			ink.paint(brush); // Draw the ink
-			ink.move(); // Move the ink
+			ink.paint(brush); // draw the ink
+			ink.move(); // move the ink
 
-			// Check if the ink hits the submarine
+			// check if the ink hits the submarine
 			if (ink.checkHit(submarine)) {
-				submarine.applyDamage(ink.getDamage()); // Apply damage to submarine
-				inks.remove(j); // Remove ink after collision
-				j--; // Adjust index after removal to avoid skipping elements
+				submarine.applyDamage(ink.getDamage()); // apply damage to submarine
+				System.out.println("Submarine hit. Remaining health: " + submarine.getHealth());
+				inks.remove(j); // remove ink after collision
+				j--; // adjust index after removal to avoid skipping elements
 			}
 		}
 
@@ -190,23 +215,36 @@ class SeaShooter extends Game implements KeyListener {
 			wave++;
 			if (wave == 2) {
 				spawnEnemies(); // Second wave
+				messageLength = 2000;
 				currentMessage = "Second Wave!";
+
 				messageDisplayTime = System.currentTimeMillis();
 			} else if (wave == 3) {
 				spawnEnemies(); // third wave
 				currentMessage = "Third Wave!"; // third wave
+				messageLength = 2000;
 				messageDisplayTime = System.currentTimeMillis();
 			} else if (wave == 4) {
 				currentMessage = "You Win!!"; // wins after three waves
+				messageColor = Color.PINK;
 				messageDisplayTime = System.currentTimeMillis();
 				on = false;
+
 			}
+
 		}
 		// handle when submarine is dead
 		if (submarine.getHealth() <= 0) {
+			wave += 5;
 			currentMessage = "You Lose :(";
+			messageColor = Color.RED;
 			messageDisplayTime = System.currentTimeMillis();
-			on = false; // ends game
+			// ends game
+			if (System.currentTimeMillis() > messageDisplayTime + 5000) {
+				on = false;
+			}
+
+			return;
 		}
 	}
 
@@ -214,8 +252,8 @@ class SeaShooter extends Game implements KeyListener {
 
 		double missileAngle = submarine.getRotation(); // submarine's rotation angle
 		Point missileStartPosition = new Point(submarine.getPosition().x + 30, submarine.getPosition().y); // adjust for
-																											// front of
-																											// sub
+																											// front
+
 		Projectile missile = new Missile(missileStartPosition, missileAngle); // create new missile, add to list
 		projectiles.add(missile);
 	}
@@ -263,6 +301,78 @@ class SeaShooter extends Game implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+	}
+
+	private class Missile extends Projectile {
+		public Missile(Point position, double angle) {
+			super(position, angle, 5, 20); // Speed 5, Damage 10
+		}
+
+		@Override
+		public void paint(Graphics brush) {
+			brush.setColor(Color.RED); // red
+			brush.fillRect((int) position.x, (int) position.y, 10, 5);
+		}
+
+		public int getDamage() {
+			return damage;
+		}
+	}
+
+	public class SquidInk extends Projectile {
+		private final int INK_WIDTH = 10;
+		private final int INK_HEIGHT = 5;
+		private final int INK_SPEED = 2;
+		private int damage = 5;
+
+		public SquidInk(Point position, double angle) {
+			super(position, angle, 2, 10); // Speed, Damage
+			this.damage = 10; // Set the damage value
+		}
+
+		@Override
+		public int getDamage() {
+			return damage;
+		}
+
+		// paint the squid ink on the screen
+		@Override
+		public void paint(Graphics brush) {
+			brush.setColor(Color.BLACK); // Squid ink is purple/magenta
+
+			// Draw the squid ink
+			brush.fillRect((int) position.x, (int) position.y, INK_WIDTH, INK_HEIGHT);
+		}
+
+		// move the ink projectile
+		@Override
+		public void move() {
+			this.position.x -= INK_SPEED;
+		}
+
+		// check if the squid ink hits the submarine
+		public boolean checkHit(Submarine target) {
+			if (target instanceof Submarine) {
+				Submarine submarine = (Submarine) target;
+
+				// check if the rectangle of the squid ink intersects with the submarine's
+				// rectangle
+				return this.position.x < submarine.getPosition().x + 60
+						&& this.position.x + INK_WIDTH > submarine.getPosition().x
+						&& this.position.y < submarine.getPosition().y + 30
+						&& this.position.y + INK_HEIGHT > submarine.getPosition().y;
+			}
+			return false;
+		}
+
+		// apply damage when the squid ink hits the submarine
+		public void onHit(Damageable target) {
+			if (target instanceof Submarine) {
+				Submarine submarine = (Submarine) target;
+				submarine.applyDamage(this.getDamage()); // Apply damage to the submarine
+			}
+		}
+
 	}
 
 	public static void main(String[] args) {

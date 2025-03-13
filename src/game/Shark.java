@@ -8,6 +8,7 @@ public class Shark extends Polygon implements Enemy {
     private final int SHARK_ATTACK = 15;  
     private boolean hasDamaged = false;
     private double speed = 0.6;
+    private double verticalSpeed;
 
     @Override
     public void attack() {
@@ -16,6 +17,7 @@ public class Shark extends Polygon implements Enemy {
 
     public Shark(Point[] sharkPoints, Point sharkPosition, double sharkRotation) {
         super(sharkPoints, sharkPosition, sharkRotation);
+        this.verticalSpeed = (Math.random() * 2 - 1) * speed * 0.5; 
     }
 
     private final Damageable takeDamage = (damage) -> sharkHealth -= damage;
@@ -55,6 +57,10 @@ public class Shark extends Polygon implements Enemy {
 
     public void moveLeft() {
         this.position.x -= speed; //moves left
+        this.position.y += verticalSpeed;//random angle
+        if (this.position.y < 0 || this.position.y > 500) {
+            verticalSpeed = -verticalSpeed; // Reverse direction if hitting the boundary
+        }
     }
 
     public double getPosition() {

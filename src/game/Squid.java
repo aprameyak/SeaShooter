@@ -19,14 +19,15 @@ public class Squid extends Polygon implements Enemy {
         if (currentTime - lastInkShotTime >= INK_COOLDOWN) {
             Point inkStartPosition = new Point(this.position.x, this.position.y); // Start position of the ink at the squid
 
-            // Create a new SquidInk and add it to the ink list
-            SquidInk squidInk = new SquidInk(inkStartPosition, 0);
+            // Create a new SquidInk and add it to the SeaShooter's ink list
+            SeaShooter.SquidInk squidInk = seaShooter.new SquidInk(inkStartPosition, 0); 
             seaShooter.addInk(squidInk);  // Add the ink to the SeaShooter's ink list
             
             // Update the last ink shot time to the current time
             lastInkShotTime = currentTime;
         }
     }
+
 
     public Squid(Point[] squidPoints, Point squidPosition, double squidRotation, SeaShooter seaShooter) {
         super(squidPoints, squidPosition, squidRotation);
