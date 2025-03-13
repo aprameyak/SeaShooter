@@ -6,6 +6,10 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This class represents the SeaShooter game
+ * It extends Game and implements KeyListener 
+ */
 class SeaShooter extends Game implements KeyListener {
 	static int counter = 0;
 	private Submarine submarine;
@@ -19,6 +23,12 @@ class SeaShooter extends Game implements KeyListener {
 	private Color messageColor = Color.black;
 
 	private GameStatus gameStatus = new GameStatus() {
+		/**
+		 * Displays the game status on the game screen
+		 * 
+		 * @param status
+		 * @param g
+		 */
 		@Override
 		public void gameStatus(String status, Graphics g) {
 
@@ -47,6 +57,9 @@ class SeaShooter extends Game implements KeyListener {
 	private long messageDisplayTime = 0;
 	private String currentMessage = null;
 
+	/**
+	 * SeaShooter constructor to initialize SeaShooter using super constructor
+	 */
 	public SeaShooter() {
 		super("SeaShooter!", 800, 600);
 		this.setFocusable(true);
@@ -66,6 +79,9 @@ class SeaShooter extends Game implements KeyListener {
 
 	}
 
+	/**
+	 * Spawns the enemies based on the given points
+	 */
 	private void spawnEnemies() {
 		Random rand = new Random();
 		// Spawn 4 sharks and squids
@@ -99,6 +115,11 @@ class SeaShooter extends Game implements KeyListener {
 		}
 	}
 
+	/**
+	 * Paints the SeaShooter game based on current frame
+	 * 
+	 * @param brush
+	 */
 	@Override
 	public void paint(Graphics brush) {
 		if (currentMessage != null && System.currentTimeMillis() - messageDisplayTime < messageLength) {
@@ -250,20 +271,31 @@ class SeaShooter extends Game implements KeyListener {
 		}
 	}
 
+	/**
+	 * Shoots a submarine missle
+	 */
 	private void shootMissile() {
-
 		double missileAngle = submarine.getRotation(); // submarine's rotation angle
 		Point missileStartPosition = new Point(submarine.getPosition().x + 30, submarine.getPosition().y); // adjust for
 																											// front
-
 		Projectile missile = new Missile(missileStartPosition, missileAngle); // create new missile, add to list
 		projectiles.add(missile);
 	}
 
+	/**
+	 * Adds ink to inks 
+	 * 
+	 * @param ink
+	 */
 	public void addInk(SquidInk ink) {
 		inks.add(ink);
 	}
 
+	/**
+	 * Sets movement booleans true based on key events
+	 * 
+	 * @param e
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -281,6 +313,12 @@ class SeaShooter extends Game implements KeyListener {
 		repaint();
 	}
 
+	/**
+	 * Sets movement booleans false based on key events
+	 * Shoots missiles based on key event
+	 * 
+	 * @param e
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -301,43 +339,81 @@ class SeaShooter extends Game implements KeyListener {
 		repaint();
 	}
 
+	/**
+	 * Implements method from KeyListener
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	/**
+	 * This class represents a Missile used by submarine
+	 * It extends Projectile and is used to attack enemies
+	 */
 	private class Missile extends Projectile {
+		/**
+		 * Missile constructor to initialize Missile using super constructor
+		 * 
+		 * @param position
+		 * @param angle
+		 */
 		public Missile(Point position, double angle) {
 			super(position, angle, 5, 20); // Speed 5, Damage 10
 		}
 
+		/**
+	 	* Paints the Missile based on current frame
+		 * 
+	 	* @param brush
+	 	*/
 		@Override
 		public void paint(Graphics brush) {
 			brush.setColor(Color.RED); // red
 			brush.fillRect((int) position.x, (int) position.y, 10, 5);
 		}
 
+		/**
+		 * Returns the damage of the Missile
+		 */
 		public int getDamage() {
 			return damage;
 		}
 	}
 
+	/**
+	 * This class represents SquidInk used by squids
+	 * It extends Projectile and is used to attack the submarine
+	 */
 	public class SquidInk extends Projectile {
 		private final int INK_WIDTH = 10;
 		private final int INK_HEIGHT = 5;
 		private final int INK_SPEED = 2;
 		private int damage = 5;
 
+		/** 
+		 * SquidInk constructor to initialize SquidInk using super constructor
+		 *
+		 * @param position
+		 * @param angle
+		 */
 		public SquidInk(Point position, double angle) {
 			super(position, angle, 2, 10); // Speed, Damage
 			this.damage = 10; // Set the damage value
 		}
 
+		/**
+		 * Returns the damage of the SquidInk
+		 */
 		@Override
 		public int getDamage() {
 			return damage;
 		}
 
-		// paint the squid ink on the screen
+/**
+	 	* Paints the SquidInk based on current frame
+		* 
+	 	* @param brush
+	 	*/		
 		@Override
 		public void paint(Graphics brush) {
 			brush.setColor(Color.BLACK); // Squid ink is purple/magenta
@@ -346,13 +422,20 @@ class SeaShooter extends Game implements KeyListener {
 			brush.fillRect((int) position.x, (int) position.y, INK_WIDTH, INK_HEIGHT);
 		}
 
-		// move the ink projectile
+		/**
+		 * Moves the SquidInk to the left
+		 */
 		@Override
 		public void move() {
 			this.position.x -= INK_SPEED;
 		}
 
-		// check if the squid ink hits the submarine
+		/**
+		 * Checks if SquidInk has hit the submarine
+		 * 
+		 * @param target
+		 * @return
+		 */
 		public boolean checkHit(Submarine target) {
 			if (target instanceof Submarine) {
 				Submarine submarine = (Submarine) target;
@@ -367,7 +450,11 @@ class SeaShooter extends Game implements KeyListener {
 			return false;
 		}
 
-		// apply damage when the squid ink hits the submarine
+		/** 
+		 * Checks if the SquidInk has hit a submarine
+   		 *
+   		 * @param target
+		 */ 
 		public void onHit(Damageable target) {
 			if (target instanceof Submarine) {
 				Submarine submarine = (Submarine) target;
