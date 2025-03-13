@@ -409,11 +409,11 @@ class SeaShooter extends Game implements KeyListener {
 			return damage;
 		}
 
-/**
-	 	* Paints the SquidInk based on current frame
-		* 
-	 	* @param brush
-	 	*/		
+		/**
+	 	 * Paints the SquidInk based on current frame
+		 * 
+	 	 * @param brush
+	 	 */		
 		@Override
 		public void paint(Graphics brush) {
 			brush.setColor(Color.BLACK); // Squid ink is purple/magenta
@@ -452,8 +452,6 @@ class SeaShooter extends Game implements KeyListener {
 
 		/** 
 		 * Checks if the SquidInk has hit a submarine
-   		 *
-   		 * @param target
 		 */ 
 		public void onHit(Damageable target) {
 			if (target instanceof Submarine) {
