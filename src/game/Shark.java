@@ -3,6 +3,11 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * This class represents a Shark in the SeaShooter game
+ * It extends Polygon and implements Enemy
+ * It attacks the submarine
+ */
 public class Shark extends Polygon implements Enemy {
     private int sharkHealth = 100;
     private final int SHARK_ATTACK = 15;  
@@ -10,11 +15,13 @@ public class Shark extends Polygon implements Enemy {
     private double speed = 0.6;
     private double verticalSpeed;
 
-    @Override
-    public void attack() {
-        System.out.println("The shark attacks!");
-    }
-
+    /**
+     * Shark constructor to initialize a shark using super constructor
+     * 
+     * @param sharkPoints
+     * @param sharkPosition
+     * @param sharkRotation
+     */
     public Shark(Point[] sharkPoints, Point sharkPosition, double sharkRotation) {
         super(sharkPoints, sharkPosition, sharkRotation);
         this.verticalSpeed = (Math.random() * 2 - 1) * speed * 0.5; 
@@ -22,25 +29,58 @@ public class Shark extends Polygon implements Enemy {
 
     private final Damageable takeDamage = (damage) -> sharkHealth -= damage;
 
+    /**
+     * Implements method from Enemy interface
+     */
+    @Override
+    public void attack() {
+        System.out.println("The shark attacks!");
+    }
+
+    /**
+     * Applies the damage to the shark's health
+     * 
+     * @param damage
+     */
     @Override
     public void takesDamage(int damage) {
         takeDamage.applyDamage(damage);
     }
 
+    /** 
+     * Returns the shark's attack damage
+     * 
+     * @return
+    */ 
     @Override
     public int getAttackDamage() {
         return SHARK_ATTACK;
     }
 
+    /**
+     * Returns the shark's current health
+     * 
+     * @return
+     */
     public int getHealth() {
         return sharkHealth;
     }
     
+    /**
+     * Changes the speed of the shark to speed
+     * 
+     * @param speed
+     */
     @Override
     public void changeSpeed(double speed) {
         this.speed = speed;
     }
     
+    /**
+     * Paints the shark based on its points
+     * 
+     * @param brush
+     */
     public void paint(Graphics brush) {
         Point[] points = this.getPoints();
         int[] xPoints = new int[points.length];
@@ -55,6 +95,9 @@ public class Shark extends Polygon implements Enemy {
         brush.fillPolygon(xPoints, yPoints, points.length);
     }
 
+    /**
+     * Moves the shark left based on speed
+     */
     public void moveLeft() {
         this.position.x -= speed; //moves left
         this.position.y += verticalSpeed;//random angle
@@ -63,10 +106,21 @@ public class Shark extends Polygon implements Enemy {
         }
     }
 
+    /**
+     * Returns the shark's x position
+     * 
+     * @return
+     */
     public double getPosition() {
         return this.position.x;
     }
 
+    /**
+     * Checks if the shark has biten the submarine
+     * 
+     * @param submarine
+     * @return
+     */
     public boolean checkCollision(Submarine submarine) {
         // Check if the shark's location overlaps with the submarine's location, a bite
         Point sharkPosition = this.position;
@@ -84,6 +138,12 @@ public class Shark extends Polygon implements Enemy {
         return false; // No collision or already damaged
     }
     
+    /**
+     * Checks if the shark has been hit by a projectile
+     * 
+     * @param projectile
+     * @return
+     */
     public boolean checkHit(Projectile projectile) {
         Point sharkPosition = this.position;
         Point projectilePosition = projectile.position;
