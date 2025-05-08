@@ -1,1 +1,1 @@
-A spinoff of space invaders made for CMSC132 at the University of Maryland with Professor Elias Gonzalez by Aprameya Kannan and Lauren Chipdey. SeaShooter is a game in which a user plays as a submarine battling squids and sharks in the deep sea.
+SeaShooter is a submarine-themed spinoff of Space Invaders, where players battle squids and sharks in the deep sea. The game features projectile mechanics, enemy waves, and increasing difficulty as the user progresses.
