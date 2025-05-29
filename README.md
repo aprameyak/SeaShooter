@@ -20,9 +20,3 @@
 - **Graphics:** AWT, Swing  
 - **Architecture:** Object-oriented design with reusable game engine components  
 - **Rendering:** Custom Canvas class with frame buffering for performance
-
-## Setup
-
-1. Clone the repository  
-2. Compile all `.java` files  
-3. Run the main class to launch the game window
